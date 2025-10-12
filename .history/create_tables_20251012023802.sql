@@ -19,11 +19,11 @@ CREATE TABLE documents (
 
 -- Insérer des filières d'exemple
 INSERT INTO filière (name) VALUES
-('IG'),
-('STAT'),
-('PLAN'),
-('GFC'),
-('GBA'),
-('GTL'),
-('GRH'),
-('GC');
+('Informatique'),
+('Mathématiques'),
+('Physique'),
+('Chimie'),
+('Biologie'),
+('Économie'),
+('Droit'),
+('Lettres');
