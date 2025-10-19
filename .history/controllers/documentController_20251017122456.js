@@ -2,7 +2,6 @@ import multer from 'multer';
 import { v2 as cloudinary } from 'cloudinary';
 import '../config/cloudinary.js';
 import { getAllDocuments, getDocumentById, createDocument, deleteDocument, searchDocuments } from '../models/document.js';
-import fetch from 'node-fetch';
 
 // Configuration multer pour la mémoire (pas de stockage local)
 const storage = multer.memoryStorage();
@@ -212,32 +211,4 @@ export const uploadMiddleware = (req, res, next) => {
     }
     next();
   });
-};
-
-// Nouvelle route : Télécharger/rediriger vers le PDF Cloudinary d'un document
-export const downloadDocumentFile = async (req, res, next) => {
-  try {
-    const { id, fileId } = req.params;
-    const document = await getDocumentById(id);
-    if (!document || !document.fichiers) {
-      return res.status(404).json({ error: 'Document ou fichiers non trouvés' });
-    }
-    // Chercher le fichier PDF correspondant
-    const file = document.fichiers.find(f => (f.publicId === fileId || f.public_id === fileId || f.publicid === fileId) && f.type === 'pdf');
-    if (!file) {
-      return res.status(404).json({ error: 'Fichier PDF non trouvé' });
-    }
-    // Ajoute l'extension .pdf au nom du fichier téléchargé
-    const filename = (file.publicId || file.public_id || 'document') + '.pdf';
-    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
-    // Télécharge le fichier depuis Cloudinary et le renvoie
-    const response = await fetch(file.url);
-    if (!response.ok) {
-      return res.status(502).json({ error: 'Impossible de récupérer le fichier PDF depuis Cloudinary' });
-    }
-    res.setHeader('Content-Type', 'application/pdf');
-    response.body.pipe(res);
-  } catch (error) {
-    next(error);
-  }
 };

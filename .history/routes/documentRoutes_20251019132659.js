@@ -6,7 +6,7 @@ import {
   deleteDocumentById,
   searchDocumentsHandler,
   uploadMiddleware,
-  downloadDocumentFile
+  downloadDocumentFile // Ajout de l'import
 } from '../controllers/documentController.js';
 import { validateDocument } from '../middleware/validation.js';
 
@@ -18,6 +18,10 @@ router.get('/', getDocuments);
 // GET /api/documents/:id - Récupérer un document spécifique
 router.get('/:id', getDocument);
 
+// Nouvelle route : Télécharger/rediriger vers le PDF Cloudinary d'un document
+// GET /api/documents/:id/download/:fileId
+router.get('/:id/download/:fileId', downloadDocumentFile);
+
 // POST /api/documents - Créer un nouveau document
 router.post('/', uploadMiddleware, validateDocument, createNewDocument);
 
@@ -26,8 +30,5 @@ router.delete('/:id', deleteDocumentById);
 
 // GET /api/search - Rechercher des documents
 router.get('/search', searchDocumentsHandler);
-
-// Nouvelle route pour télécharger un PDF avec extension .pdf
-router.get('/:id/download/:fileId', downloadDocumentFile);
 
 export default router;

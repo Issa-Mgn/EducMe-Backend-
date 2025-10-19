@@ -5,8 +5,7 @@ import {
   createNewDocument,
   deleteDocumentById,
   searchDocumentsHandler,
-  uploadMiddleware,
-  downloadDocumentFile
+  uploadMiddleware
 } from '../controllers/documentController.js';
 import { validateDocument } from '../middleware/validation.js';
 
@@ -26,8 +25,5 @@ router.delete('/:id', deleteDocumentById);
 
 // GET /api/search - Rechercher des documents
 router.get('/search', searchDocumentsHandler);
-
-// Nouvelle route pour télécharger un PDF avec extension .pdf
-router.get('/:id/download/:fileId', downloadDocumentFile);
 
 export default router;
